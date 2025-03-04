@@ -22,7 +22,7 @@
         }).addTo(map);
 
         // Last inn GeoJSON med belysningspunktene
-        fetch('belysningspunkter.geojson')
+        fetch('belysningspunkter.json')
             .then(response => response.json())
             .then(data => {
                 L.geoJSON(data, {
