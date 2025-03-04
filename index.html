@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belysningspunkter</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <h2>Belysningspunkter - Rapportering</h2>
+    <p>Klikk på et belysningspunkt for å rapportere feil.</p>
+    <div id="map" style="height: 600px;"></div>
+
+    <script>
+        // Initialiser kartet
+        var map = L.map('map').setView([59.91, 10.75], 7); // Zoomer inn på Norge
+
+        // Legg til bakgrunnskart
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Last inn GeoJSON med belysningspunktene
+        fetch('belysningspunkter.geojson')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        var punktID = feature.properties.id; // Endre dette til riktig ID-felt fra GeoJSON
+                        layer.bindPopup(`<b>Belysningspunkt:</b> ${punktID} <br>
+                            <a href="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?entry.123456789=${punktID}" target="_blank">
+                            Meld feil</a>`);
+                    }
+                }).addTo(map);
+            });
+    </script>
+</body>
+</html>
